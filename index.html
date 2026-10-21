@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thank You, Teachers</title>
+<style>
+:root{--bg1:#fff1f5;--bg2:#ffe0ec;--ink:#4a2338;--paper:#fffdf6;--env:#f3c9a5;--env2:#e5b087;--pink:#ff4f8b;--grey:#7b7b84;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#1d1220;--bg2:#2c1730;--ink:#f6dbe8;--paper:#fbf4e6;--env:#c99872;--env2:#b07f5a;--grey:#8d8d96}}
+:root[data-theme="dark"]{--bg1:#1d1220;--bg2:#2c1730;--ink:#f6dbe8;--paper:#fbf4e6;--env:#c99872;--env2:#b07f5a;--grey:#8d8d96}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(circle at 50% 30%,var(--bg1),var(--bg2));color:var(--ink);font-family:Georgia,'Times New Roman',serif;overflow:hidden;background-color:var(--bg1)}
+.hint{position:fixed;left:0;right:0;bottom:calc(8vh + env(safe-area-inset-bottom,0px));text-align:center;opacity:.7;font-style:italic;transition:opacity .4s}
+/* envelope */
+#env{position:fixed;left:50%;top:50%;width:clamp(280px,50vw,720px);aspect-ratio:3/2;transform:translate(-50%,-50%);cursor:pointer;z-index:10;transition:opacity .8s,transform .3s}
+#env:hover{transform:translate(-50%,-50%) scale(1.03)}
+#env.shake{animation:shake .5s 3}
+@keyframes shake{25%{transform:translate(-50%,-50%) rotate(-4deg)}75%{transform:translate(-50%,-50%) rotate(4deg)}}
+#env div{position:absolute}
+.eb{inset:0;background:var(--env2);border-radius:6px;box-shadow:0 20px 40px rgba(0,0,0,.25)}
+.ef{inset:0;background:var(--env);clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);border-radius:6px}
+.fl{left:0;right:0;top:0;height:60%;background:var(--env);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .7s;filter:brightness(.93);z-index:3}
+#env.open .fl{transform:rotateX(180deg);z-index:0}
+.seal{left:50%;top:50%;transform:translate(-50%,-50%);font-size:clamp(24px,5vw,44px);z-index:4;transition:opacity .3s}
+#env.open .seal{opacity:0}
+/* flowers */
+.bloom{position:fixed;left:50%;top:50%;font-size:clamp(24px,5vw,44px);pointer-events:none;z-index:30;animation:fly 2.4s cubic-bezier(.1,.7,.3,1) forwards}
+@keyframes fly{0%{transform:translate(-50%,-50%) scale(.2)}70%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--r)) scale(1.2);opacity:0}}
+/* paper */
+#paper{position:fixed;left:50%;top:50%;width:min(92vw,560px);max-height:88vh;overflow:auto;background:var(--paper);color:#4a2338;padding:26px 24px;border-radius:6px;box-shadow:0 25px 60px rgba(0,0,0,.35);text-align:center;z-index:20;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.12);transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .6s;background-image:repeating-linear-gradient(transparent 0 31px,rgba(200,120,150,.18) 31px 32px)}
+#paper.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+#paper.tuck{z-index:5;pointer-events:none}
+#paper h1{margin:0 0 10px;font-size:clamp(24px,6vw,34px)}
+#paper p{line-height:1.7;margin:8px 0;font-size:clamp(15px,3.8vw,18px)}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+button{font:inherit;cursor:pointer;border:0;border-radius:30px;padding:11px 20px;font-size:16px;transition:transform .2s}
+button:hover{transform:scale(1.06)}
+.b1{background:#e3e0e6;color:#3a3340}.b2{background:var(--pink);color:#fff}
+/* pieces */
+.piece{position:fixed;background:var(--paper);z-index:25;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.2);animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+.shard{position:fixed;z-index:25;pointer-events:none;animation:fall 1.6s cubic-bezier(.2,.6,.4,1) forwards}
+/* messages */
+.msg{position:fixed;left:50%;top:50%;width:min(90vw,520px);transform:translate(-50%,-50%);text-align:center;opacity:0;pointer-events:none;transition:opacity 1s;z-index:15;font-size:clamp(17px,4.4vw,22px);line-height:1.7}
+.msg.show{opacity:1;pointer-events:auto}
+.msg small{display:block;opacity:.7;margin-top:10px;font-size:.8em}
+/* heart scene */
+#scene{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:12;background:radial-gradient(circle,rgba(0,0,0,.15),transparent)}
+#scene.on{display:flex}
+#stage{position:relative;width:100%;height:340px}
+:root{--off:min(26vw,150px)}
+#hw{position:absolute;left:50%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;transition:transform 1.2s ease;width:260px}
+#hw.side{transform:translateX(calc(-50% - var(--off))) scale(.62);transform-origin:top center}
+#tip{min-height:62px;text-align:center;font-weight:bold;font-size:17px;color:var(--grey);transition:color .5s;line-height:1.4}
+#hw.alive #tip{color:var(--pink)}
+#heart{width:200px;cursor:pointer;-webkit-tap-highlight-color:transparent;fill:var(--grey);transition:fill .6s;animation:weak 2.6s infinite}
+#heart:active{transform:scale(.92)}
+#hw.alive #heart{fill:var(--pink);animation:beat .85s infinite;filter:drop-shadow(0 0 18px rgba(255,79,139,.6))}
+@keyframes weak{0%,100%{transform:scale(1)}50%{transform:scale(.97)}}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.14)}30%{transform:scale(1)}45%{transform:scale(1.08)}}
+#ecg{width:240px;height:40px;overflow:hidden;margin-top:6px}
+#ecg path{fill:none;stroke:var(--grey);stroke-width:2.5;stroke-linejoin:round}
+#hw.alive #ecg path{stroke:var(--pink)}
+#ecg g.run{animation:scroll 1s linear infinite}
+@keyframes scroll{to{transform:translateX(-100px)}}
+#bq{position:absolute;left:50%;top:60px;transform:translateX(calc(-50% + var(--off))) scale(0);font-size:120px;transition:transform 1s cubic-bezier(.3,1.5,.5,1);line-height:1}
+#bq.show{transform:translateX(calc(-50% + var(--off))) scale(1);animation:sway 3s 1s ease-in-out infinite}
+@keyframes sway{50%{transform:translateX(calc(-50% + var(--off))) rotate(6deg)}}
+#thanks{text-align:center;opacity:0;transition:opacity 1s;padding:0 16px;min-height:130px}
+#thanks.show{opacity:1}
+#thanks h2{font-size:clamp(30px,8vw,52px);margin:0 0 8px;color:var(--pink)}
+#thanks h2 span{display:inline-block;animation:bob 1.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+#thanks p{margin:6px 0;line-height:1.6}
+#again{display:none;margin-top:6px;background:var(--grey);color:#fff}
+</style>
+</head>
+<body>
+<div class="hint" id="hint">Tap the letter ✉️</div>
+
+<div id="env"><div class="eb"></div><div class="fl"></div><div class="ef"></div><div class="seal">💌</div></div>
+
+<div id="paper">
+  <h1>I'm Sorrryyy Babee!!🌸</h1>
+  <p>i'm sorry for all the times i was a pain in the ass, for all the times i didn't listen, for all the times i made you feel like you were not enough. I know i can be a handful sometimes, but please know that i appreciate everything you do for me,i am soorryy you have to endure mee but i never acted anywhere and i care for you i just want to make you happy please know i love you not just to seek someones attention i feel conected with you and i want to be with you 
+  </p>
+  <p>I am soorry you have to go through this every time but a genuinely lovvee you and i don't want to lose you,from the starting you made me better eacch time i didn't know you felt this again i'm trying my best soorryyyy</p>
+  <p><b>With love and gratitude💐</b></p>
+  <div class="btns">
+    <button class="b1" id="dont">Don’t care</button>
+    <button class="b2" id="keep">Keep it in your memories</button>
+  </div>
+</div>
+
+<div class="msg" id="m2">Oh. The paper is in pieces, so do my heart. 💔
+  <small>Somewhere,i am still hoping you will forgive me</small>
+  <div class="btns"><button class="b2" id="redo">Maybe I do care…</button></div>
+</div>
+
+<div id="scene">
+  <div id="stage">
+    <div id="hw">
+      <div id="tip"></div>
+      <svg id="heart" viewBox="0 0 100 90"><path d="M50 85C10 55 0 30 15 15C28 3 45 10 50 25C55 10 72 3 85 15C100 30 90 55 50 85Z"/></svg>
+      <svg id="ecg" viewBox="0 0 240 40"><g id="eg"><path id="ep" d="M0 20H900"/></g></svg>
+    </div>
+    <div id="bq">💐</div>
+  </div>
+  <div id="thanks"></div>
+  <button id="again">Try again</button>
+</div>
+
+<script>
+const $=id=>document.getElementById(id),R=(a,b)=>a+Math.random()*(b-a);
+const env=$('env'),paper=$('paper'),hw=$('hw'),tip=$('tip'),heart=$('heart');
+let clicks=0,timer=null,state='idle';
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const flatPath='M0 20H900';
+let beatPath='M0 20';for(let i=0;i<9;i++){beatPath+=`H${i*100+30}L${i*100+36} 20L${i*100+42} 4L${i*100+50} 36L${i*100+56} 20H${i*100+100}`}
+
+function burst(){
+  const em=['🌸','🌷','🌹','🌼','🌺','💮','🌻'];
+  for(let i=0;i<42;i++){
+    const f=document.createElement('div');f.className='bloom';f.textContent=em[i%em.length];
+    const a=R(0,Math.PI*2),d=R(120,Math.max(innerWidth,innerHeight)*.6);
+    f.style.setProperty('--dx',Math.cos(a)*d+'px');f.style.setProperty('--dy',(Math.sin(a)*d-80)+'px');
+    f.style.setProperty('--r',R(-300,300)+'deg');f.style.animationDelay=R(0,.3)+'s';
+    document.body.appendChild(f);setTimeout(()=>f.remove(),3000);
+  }
+}
+env.onclick=async()=>{
+  if(state!=='idle')return;state='open';$('hint').style.opacity=0;
+  env.classList.add('open');await wait(500);burst();await wait(600);paper.classList.add('show');
+};
+async function tuck(){
+  paper.classList.add('tuck');paper.classList.remove('show');await wait(1000);env.classList.remove('open');await wait(700);
+}
+$('dont').onclick=async()=>{
+  await tuck();env.classList.add('shake');await wait(1500);env.classList.remove('shake');
+  const r=env.getBoundingClientRect();
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');p.className='piece';
+    const w=R(25,70),h=R(20,55);
+    p.style.cssText+=`width:${w}px;height:${h}px;left:${r.left+R(0,r.width-w)}px;top:${r.top+R(0,r.height-h)}px;clip-path:polygon(${R(0,30)}% 0,100% ${R(0,40)}%,${R(60,100)}% 100%,0 ${R(60,100)}%);--dx:${R(-200,200)}px;--dy:${R(150,500)}px;--r:${R(-540,540)}deg`;
+    document.body.appendChild(p);setTimeout(()=>p.remove(),2000);
+  }
+  env.style.opacity=0;await wait(1400);$('m2').classList.add('show');
+};
+$('redo').onclick=async()=>{
+  $('m2').classList.remove('show');await wait(900);
+  env.style.opacity=1;env.classList.remove('open');paper.classList.remove('tuck');state='idle';$('hint').style.opacity=.7;
+};
+$('keep').onclick=async()=>{
+  await tuck();env.style.opacity=0;await wait(900);startHeart();
+};
+
+function setEcg(alive){
+  $('ep').setAttribute('d',alive?beatPath:flatPath);
+  $('eg').setAttribute('class',alive?'run':'');
+}
+function startHeart(){
+  clearTimeout(timer);clicks=0;state='dying';
+  $('scene').classList.add('on');
+  hw.className='';heart.style.display='';hw.style.opacity=1;
+  $('bq').classList.remove('show');$('thanks').classList.remove('show');$('thanks').innerHTML='';
+  $('again').style.display='none';setEcg(false);
+  tip.innerHTML='I’m dying… save me by clicking on it 10 times 💔<br><span id="cnt">0 / 10</span>';
+  timer=setTimeout(die,5000);
+}
+heart.onclick=()=>{
+  if(state!=='dying')return;
+  clicks++;$('cnt').textContent=clicks+' / 10';
+  clearTimeout(timer);
+  if(clicks>=10)return revive();
+  timer=setTimeout(die,5000);
+};
+async function revive(){
+  state='alive';hw.classList.add('alive');setEcg(true);
+  tip.textContent='I’m alive! You saved me 💗';
+  await wait(5000);finale();
+}
+async function finale(){
+  hw.classList.add('side');await wait(900);
+  $('bq').classList.add('show');
+  const t=$('thanks');
+  t.innerHTML='<h2>'+[...'Thankk youuu'].map((c,i)=>c===' '?'&nbsp;':`<span style="animation-delay:${i*.1}s">${c}</span>`).join('')+'</h2><p>For every lesson, every late hour and every little push that made me believe in us.</p><p>You are the reason we bloom. Thank You!!</p>';
+  t.classList.add('show');
+  const em=['🌸','🌷','💖','🌼','✨'];
+  for(let i=0;i<40;i++){
+    const f=document.createElement('div');f.className='bloom';f.textContent=em[i%5];
+    f.style.cssText+=`left:${R(0,100)}%;top:-5%;--dx:${R(-60,60)}px;--dy:${innerHeight*1.1}px;--r:${R(-360,360)}deg;animation-duration:${R(3,6)}s;animation-delay:${R(0,2.5)}s`;
+    document.body.appendChild(f);setTimeout(()=>f.remove(),9000);
+  }
+}
+function die(){
+  if(state!=='dying')return;state='dead';
+  const r=heart.getBoundingClientRect();heart.style.display='none';
+  for(let i=0;i<22;i++){
+    const s=document.createElement('div');s.className='shard';
+    const w=R(20,50);
+    s.style.cssText+=`width:${w}px;height:${w}px;background:var(--grey);left:${r.left+R(0,r.width-w)}px;top:${r.top+R(0,r.height-w)}px;clip-path:polygon(${R(0,40)}% 0,100% ${R(0,50)}%,${R(40,100)}% 100%,0 ${R(50,100)}%);--dx:${R(-220,220)}px;--dy:${R(120,420)}px;--r:${R(-540,540)}deg`;
+    document.body.appendChild(s);setTimeout(()=>s.remove(),1800);
+  }
+  tip.innerHTML='Why didn’t you save meee? 😢';setEcg(false);
+  setTimeout(()=>$('again').style.display='inline-block',900);
+}
+$('again').onclick=startHeart;
+</script>
+</body>
+</html>
